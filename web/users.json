@@ -1,0 +1,20 @@
+[
+  {
+    "email": "nguyenthihongtuyet122022@gmail.com",
+    "password": "entirety",
+    "role": "admin",
+    "name": "Admin Tuyết"
+  },
+  {
+    "email": "nguyenthihongtuyet004@gmail.com",
+    "password": "entirety",
+    "role": "user",
+    "name": "Tuyết 1"
+  },
+  {
+    "email": "nguyentuyet1@gmail.com",
+    "password": "entirety",
+    "role": "user",
+    "name": " tuyet 1"
+  }
+]

@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="text-align:center; color:#1a73e8; margin-bottom:24px;">Dự đoán độ trễ chuyến bay</h2>
+
+<style>
+    label {
+        display: block;
+        margin-top: 12px;
+        margin-bottom: 4px;
+        color: #333;
+        font-weight: 500;
+    }
+    input, select {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #cfd8dc;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    input[type="submit"] {
+        background: #1a73e8;
+        color: #fff;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 16px;
+        transition: background 0.2s;
+    }
+    input[type="submit"]:hover {
+        background: #1761c7;
+    }
+    .section-title {
+        margin-top: 18px;
+        color: #1761c7;
+        font-size: 1.08rem;
+    }
+    .result-box {
+        background: #e3f2fd;
+        border: 1.5px solid #90caf9;
+        border-radius: 8px;
+        padding: 18px 14px;
+        margin-top: 24px;
+        text-align: center;
+        font-size: 1.25rem;
+        color: #0d47a1;
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(26,115,232,0.07);
+    }
+</style>
+
+<form method="POST">
+    <label>Chọn chế độ dự đoán:</label>
+    <select id="mode" name="mode" onchange="togglePrevFlight()">
+        <option value="normal">Dự đoán thông thường</option>
+        <option value="prev_flight">Dự đoán dựa trên chuyến bay trước</option>
+    </select>
+
+    <label>Thời gian bay dự kiến (phút):</label>
+    <input type="number" name="elapsed_time" min="1" required>
+
+    <label>Thời gian khởi hành:</label>
+    <input type="datetime-local" name="departure_time" required>
+
+    <label>Tail Number:</label>
+    <input type="text" name="tail_number" maxlength="10" required>
+
+    <label>Carrier Code:</label>
+    <input type="text" name="carrier_code" maxlength="5" required>
+
+    <label>Origin Airport:</label>
+    <input type="text" name="origin_airport" maxlength="5" required>
+
+    <label>Destination Airport:</label>
+    <input type="text" name="destination_airport" maxlength="5" required>
+
+    <div class="section-title">Dữ liệu thời tiết (sân bay đi):</div>
+    <label>Nhiệt độ (°C):</label>
+    <input type="number" step="0.1" name="temp_x" required>
+    <label>Lượng mưa (mm):</label>
+    <input type="number" step="0.1" name="precip_x" required>
+    <label>Tốc độ gió (km/h):</label>
+    <input type="number" step="0.1" name="wind_x" required>
+
+    <div class="section-title">Dữ liệu thời tiết (sân bay đến):</div>
+    <label>Nhiệt độ (°C):</label>
+    <input type="number" step="0.1" name="temp_y" required>
+    <label>Lượng mưa (mm):</label>
+    <input type="number" step="0.1" name="precip_y" required>
+    <label>Tốc độ gió (km/h):</label>
+    <input type="number" step="0.1" name="wind_y" required>
+
+    <div id="prev-flight-fields" style="display:none;">
+        <div class="section-title">Thông tin chuyến bay trước đó:</div>
+        <label>Thời gian xuất phát chuyến trước:</label>
+        <input type="datetime-local" name="prev_departure_time">
+        <label>Thời gian đến chuyến trước:</label>
+        <input type="datetime-local" name="prev_arrival_time">
+    </div>
+
+    <label>Chọn mô hình ML:</label>
+    <select name="model" required>
+        <option value="LinearRegression_model">Linear Regression</option>
+        <option value="RandomForest_model">Random Forest</option>
+        <option value="XGBoost_model">XGBoost</option>
+        <option value="LightGBM_model">LightGBM</option>
+    </select>
+
+    <input type="submit" value="Dự đoán">
+</form>
+
+{% if error %}
+<div class="result-box" style="background:#ffebee; color:#b71c1c; border-color:#ef9a9a;">
+    ⚠️ {{ error }}
+</div>
+{% endif %}
+
+{% if prediction %}
+<div class="result-box">
+    ⏱️ Dự đoán độ trễ: {{ prediction }} phút
+</div>
+{% endif %}
+
+{% if form_data and prediction %}
+<div class="result-box" style="background:#fffde7; color:#795548; border-color:#ffe082; text-align:left;">
+    <b>Thông tin chuyến bay vừa nhập:</b><br>
+    Chế độ dự đoán: {{ form_data.mode }}<br>
+    Thời gian bay dự kiến: {{ form_data.elapsed_time }} phút<br>
+    Thời gian khởi hành: {{ form_data.departure_time|replace('T', ' ') }}<br>
+    Tail Number: {{ form_data.tail_number }}<br>
+    Carrier Code: {{ form_data.carrier_code }}<br>
+    Sân bay đi: {{ form_data.origin_airport }}<br>
+    Sân bay đến: {{ form_data.destination_airport }}<br>
+    <b>Thời tiết sân bay đi:</b>
+    Nhiệt độ: {{ form_data.temp_x }}°C, Mưa: {{ form_data.precip_x }}mm, Gió: {{ form_data.wind_x }}km/h<br>
+    <b>Thời tiết sân bay đến:</b>
+    Nhiệt độ: {{ form_data.temp_y }}°C, Mưa: {{ form_data.precip_y }}mm, Gió: {{ form_data.wind_y }}km/h<br>
+    {% if form_data.mode == "prev_flight" %}
+    <b>Thông tin chuyến trước:</b>
+    Xuất phát: {{ form_data.prev_departure_time|replace('T', ' ') }}<br>
+    Đến nơi: {{ form_data.prev_arrival_time|replace('T', ' ') }}
+    {% endif %}
+    <br>Mô hình ML: {{ form_data.model }}
+</div>
+{% endif %}
+
+{% if prev_delay is not none %}
+<div class="result-box" style="background:#e3f2fd; color:#0d47a1;">
+    Độ trễ chuyến bay trước: {{ prev_delay|round(2) }} phút
+</div>
+{% endif %}
+
+{% if arrival_time_str %}
+<div class="result-box" style="background:#e8f5e9; color:#1b5e20; border-color:#a5d6a7;">
+    🛬 Thời gian đến dự kiến: {{ arrival_time_str }}
+</div>
+{% endif %}
+
+<script>
+function togglePrevFlight() {
+    var mode = document.getElementById('mode').value;
+    document.getElementById('prev-flight-fields').style.display = (mode === 'prev_flight') ? 'block' : 'none';
+}
+window.onload = togglePrevFlight;
+</script>
+{% endblock %}

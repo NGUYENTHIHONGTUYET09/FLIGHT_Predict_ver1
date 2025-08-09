@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width:1200px; margin:0 auto; padding:20px;">
+    <!-- Hero Section -->
+    <div style="text-align:center; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; border-radius:16px; padding:60px 20px; margin-bottom:40px;">
+        <h1 style="font-size:42px; margin-bottom:20px; font-weight:700;">🛫 Hệ thống dự đoán chậm chuyến bay</h1>
+        <p style="font-size:18px; margin-bottom:30px; opacity:0.9;">Sử dụng trí tuệ nhân tạo để dự đoán khả năng chậm chuyến bay với độ chính xác cao</p>
+        <a href="#" onclick="checkPredictAccess()" style="background:#fff; color:#667eea; padding:12px 32px; border-radius:24px; text-decoration:none; font-weight:600; font-size:16px; box-shadow:0 4px 16px rgba(0,0,0,0.1);">
+            Bắt đầu dự đoán ✈️
+        </a>
+    </div>
+
+    <!-- Features Grid -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; margin-bottom:40px;">
+        <div style="background:#fff; padding:28px; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.08); text-align:center;">
+            <div style="font-size:48px; margin-bottom:16px;">🎯</div>
+            <h3 style="color:#333; margin-bottom:12px;">Độ chính xác cao</h3>
+            <p style="color:#666; line-height:1.6;">Sử dụng thuật toán Machine Learning tiên tiến với độ chính xác lên đến 85%</p>
+        </div>
+        
+        <div style="background:#fff; padding:28px; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.08); text-align:center;">
+            <div style="font-size:48px; margin-bottom:16px;">⚡</div>
+            <h3 style="color:#333; margin-bottom:12px;">Xử lý nhanh</h3>
+            <p style="color:#666; line-height:1.6;">Kết quả dự đoán trong vòng vài giây với giao diện thân thiện</p>
+        </div>
+        
+        <div style="background:#fff; padding:28px; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.08); text-align:center;">
+            <div style="font-size:48px; margin-bottom:16px;">📊</div>
+            <h3 style="color:#333; margin-bottom:12px;">Nhiều thuật toán</h3>
+            <p style="color:#666; line-height:1.6;">Hỗ trợ RandomForest, XGBoost, LightGBM và Linear Regression</p>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:#fff; border-radius:16px; padding:40px; text-align:center; margin-bottom:40px;">
+        <h2 style="margin-bottom:24px; font-size:28px;">📈 Thống kê hệ thống</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:24px;">
+            <div>
+                <div style="font-size:36px; font-weight:700; margin-bottom:8px;">{{ stats.total_predictions or 0 }}</div>
+                <div style="opacity:0.9;">Lượt dự đoán</div>
+            </div>
+            <div>
+                <div style="font-size:36px; font-weight:700; margin-bottom:8px;">{{ (stats.accuracy * 100) | round(1) if stats.accuracy else 0 }}%</div>
+                <div style="opacity:0.9;">Độ chính xác</div>
+            </div>
+            <div>
+                <div style="font-size:36px; font-weight:700; margin-bottom:8px;">{{ stats.total_users or 0 }}</div>
+                <div style="opacity:0.9;">Người dùng</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How it works -->
+    <div style="background:#fff; padding:40px; border-radius:16px; box-shadow:0 2px 16px rgba(0,0,0,0.08); margin-bottom:40px;">
+        <h2 style="text-align:center; color:#333; margin-bottom:32px; font-size:28px;">🔬 Cách thức hoạt động</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:24px;">
+            <div style="text-align:center;">
+                <div style="background:#667eea; color:#fff; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:24px; font-weight:bold;">1</div>
+                <h4 style="color:#333; margin-bottom:12px;">Nhập thông tin</h4>
+                <p style="color:#666; line-height:1.6;">Cung cấp thông tin chuyến bay, thời tiết và các yếu tố liên quan</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="background:#667eea; color:#fff; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:24px; font-weight:bold;">2</div>
+                <h4 style="color:#333; margin-bottom:12px;">Xử lý AI</h4>
+                <p style="color:#666; line-height:1.6;">Hệ thống AI phân tích và xử lý dữ liệu với thuật toán tiên tiến</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="background:#667eea; color:#fff; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:24px; font-weight:bold;">3</div>
+                <h4 style="color:#333; margin-bottom:12px;">Kết quả</h4>
+                <p style="color:#666; line-height:1.6;">Nhận kết quả dự đoán chính xác và chi tiết về khả năng delay</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div style="text-align:center; background:#f8fafc; padding:40px; border-radius:16px; border:2px dashed #667eea;">
+        <h2 style="color:#333; margin-bottom:16px; font-size:28px;">🚀 Sẵn sàng bắt đầu?</h2>
+        <p style="color:#666; margin-bottom:24px; font-size:16px;">Hãy thử dự đoán chuyến bay của bạn ngay bây giờ!</p>
+        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+            <a href="#" onclick="checkPredictAccess()" style="background:#667eea; color:#fff; padding:12px 28px; border-radius:24px; text-decoration:none; font-weight:600;">
+                Dự đoán ngay
+            </a>
+            <a href="{{ url_for('chat') }}" style="background:#fff; color:#667eea; padding:12px 28px; border-radius:24px; text-decoration:none; font-weight:600; border:2px solid #667eea;">
+                Chat hỗ trợ
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

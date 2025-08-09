@@ -1,93 +1,6 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Dự đoán độ trễ chuyến bay</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            background: #f4f8fb;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 480px;
-            margin: 40px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-            padding: 32px 24px 24px 24px;
-        }
-        h2 {
-            text-align: center;
-            color: #1a73e8;
-            margin-bottom: 24px;
-        }
-        label {
-            display: block;
-            margin-top: 12px;
-            margin-bottom: 4px;
-            color: #333;
-            font-weight: 500;
-        }
-        input, select {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #cfd8dc;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        input[type="submit"] {
-            background: #1a73e8;
-            color: #fff;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 16px;
-            transition: background 0.2s;
-        }
-        input[type="submit"]:hover {
-            background: #1761c7;
-        }
-        .section-title {
-            margin-top: 18px;
-            color: #1761c7;
-            font-size: 1.08rem;
-        }
-        .result-box {
-            background: #e3f2fd;
-            border: 1.5px solid #90caf9;
-            border-radius: 8px;
-            padding: 18px 14px;
-            margin-top: 24px;
-            text-align: center;
-            font-size: 1.25rem;
-            color: #0d47a1;
-            font-weight: bold;
-            box-shadow: 0 2px 8px rgba(26,115,232,0.07);
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 16px 4vw 16px 4vw;
-            }
-            h2 {
-                font-size: 1.2rem;
-            }
-        }
-    </style>
-    <script>
-    function togglePrevFlight() {
-        var mode = document.getElementById('mode').value;
-        document.getElementById('prev-flight-fields').style.display = (mode === 'prev_flight') ? 'block' : 'none';
-    }
-    window.onload = togglePrevFlight;
-    </script>
-</head>
-<body>
-    <div class="container">
+{% extends "base.html" %}
+{% block content %}
+<h2 style="text-align:center; color:#1a73e8; margin-bottom:24px;">Dự đoán độ trễ chuyến bay</h2>
         <h2>Dự đoán độ trễ chuyến bay</h2>
         <form method="POST">
             <label>Chọn chế độ dự đoán:</label>
@@ -195,6 +108,11 @@
             🛬 Thời gian đến dự kiến: {{ arrival_time_str }}
         </div>
         {% endif %}
-    </div>
-</body>
-</html>
+<script>
+function togglePrevFlight() {
+    var mode = document.getElementById('mode').value;
+    document.getElementById('prev-flight-fields').style.display = (mode === 'prev_flight') ? 'block' : 'none';
+}
+window.onload = togglePrevFlight;
+</script>
+{% endblock %}
