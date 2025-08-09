@@ -19,3 +19,5 @@ python models/train_model.py
 python web/app.py
 
 5. Truy cập: `http://localhost:5000`
+
+Opened Simple Browser at http://127.0.0.1:5000
