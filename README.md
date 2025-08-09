@@ -21,3 +21,6 @@ python web/app.py
 5. Truy cập: `http://localhost:5000`
 
 Opened Simple Browser at http://127.0.0.1:5000
+
+
+cd "d:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\web"; python simple_app.py
