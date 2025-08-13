@@ -1,0 +1,20 @@
+{
+  "mode": "normal",
+  "elapsed_time": "120",
+  "departure_time": "2025-08-15T14:30",
+  "tail_number": "N123AB",
+  "carrier_code": "VN",
+  "origin_airport": "SGN",
+  "destination_airport": "HAN",
+  "temp_x": "28.5",
+  "precip_x": "0.2",
+  "wind_x": "15.3",
+  "temp_y": "25.1",
+  "precip_y": "0.0",
+  "wind_y": "12.8",
+  "model": "XGBoost_model",
+  "prev_departure_time": "",
+  "prev_arrival_time": "",
+  "export_time": "2025-08-13T10:30:00.000Z",
+  "export_date": "13/08/2025"
+}

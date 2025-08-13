@@ -1,118 +1,1045 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 style="text-align:center; color:#1a73e8; margin-bottom:24px;">Dự đoán độ trễ chuyến bay</h2>
-        <h2>Dự đoán độ trễ chuyến bay</h2>
-        <form method="POST">
-            <label>Chọn chế độ dự đoán:</label>
-            <select id="mode" name="mode" onchange="togglePrevFlight()">
-                <option value="normal">Dự đoán thông thường</option>
-                <option value="prev_flight">Dự đoán dựa trên chuyến bay trước</option>
-            </select>
+<div class="page-header">
+    <h1 class="page-title">✈️ Dự đoán độ trễ chuyến bay</h1>
+    <p class="page-subtitle">Nhập thông tin chuyến bay để dự đoán độ trễ chính xác</p>
+</div>
 
-            <label>Thời gian bay dự kiến (phút):</label>
-            <input type="number" name="elapsed_time" min="1" required>
+<div class="prediction-container">
+    <form method="POST" class="prediction-form">
+        <div class="form-grid-3col">
+            <!-- Cột 1: Cấu hình & Mô hình -->
+            <div class="form-column config-column">
+                <div class="column-header">
+                    <div class="column-icon">⚙️</div>
+                    <h3 class="column-title">Cấu hình dự đoán</h3>
+                </div>
+                
+                <div class="form-card">
+                    <div class="form-group">
+                        <label for="mode">Chế độ dự đoán:</label>
+                        <select id="mode" name="mode" class="form-control modern-select" onchange="togglePrevFlight()">
+                            <option value="normal">🔄 Dự đoán thông thường</option>
+                            <option value="prev_flight">📊 Dựa trên chuyến bay trước</option>
+                        </select>
+                    </div>
 
-            <label>Thời gian khởi hành:</label>
-            <input type="datetime-local" name="departure_time" required>
+                    <div class="form-group">
+                        <label for="model">Mô hình Machine Learning:</label>
+                        <select name="model" class="form-control modern-select" required>
+                            <option value="LinearRegression_model">📈 Linear Regression</option>
+                            <option value="RandomForest_model">🌳 Random Forest</option>
+                            <option value="XGBoost_model">🚀 XGBoost</option>
+                            <option value="LightGBM_model">⚡ LightGBM</option>
+                        </select>
+                    </div>
 
-            <label>Tail Number:</label>
-            <input type="text" name="tail_number" maxlength="10" required>
-
-            <label>Carrier Code:</label>
-            <input type="text" name="carrier_code" maxlength="5" required>
-
-            <label>Origin Airport:</label>
-            <input type="text" name="origin_airport" maxlength="5" required>
-
-            <label>Destination Airport:</label>
-            <input type="text" name="destination_airport" maxlength="5" required>
-
-            <div class="section-title">Dữ liệu thời tiết (sân bay đi):</div>
-            <label>Nhiệt độ (°C):</label>
-            <input type="number" step="0.1" name="temp_x" required>
-            <label>Lượng mưa (mm):</label>
-            <input type="number" step="0.1" name="precip_x" required>
-            <label>Tốc độ gió (km/h):</label>
-            <input type="number" step="0.1" name="wind_x" required>
-
-            <div class="section-title">Dữ liệu thời tiết (sân bay đến):</div>
-            <label>Nhiệt độ (°C):</label>
-            <input type="number" step="0.1" name="temp_y" required>
-            <label>Lượng mưa (mm):</label>
-            <input type="number" step="0.1" name="precip_y" required>
-            <label>Tốc độ gió (km/h):</label>
-            <input type="number" step="0.1" name="wind_y" required>
-
-            <div id="prev-flight-fields" style="display:none;">
-                <div class="section-title">Thông tin chuyến bay trước đó:</div>
-                <label>Thời gian xuất phát chuyến trước:</label>
-                <input type="datetime-local" name="prev_departure_time">
-                <label>Thời gian đến chuyến trước:</label>
-                <input type="datetime-local" name="prev_arrival_time">
+                    <div class="form-group">
+                        <label for="elapsed_time">Thời gian bay dự kiến:</label>
+                        <div class="input-with-unit">
+                            <input type="number" name="elapsed_time" class="form-control" min="1" placeholder="120" required>
+                            <span class="input-unit">phút</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <label>Chọn mô hình ML:</label>
-            <select name="model" required>
-                <option value="LinearRegression_model">Linear Regression</option>
-                <option value="RandomForest_model">Random Forest</option>
-                <option value="XGBoost_model">XGBoost</option>
-                <option value="LightGBM_model">LightGBM</option>
-            </select>
+            <!-- Cột 2: Thông tin chuyến bay -->
+            <div class="form-column flight-column">
+                <div class="column-header">
+                    <div class="column-icon">✈️</div>
+                    <h3 class="column-title">Thông tin chuyến bay</h3>
+                </div>
+                
+                <div class="form-card">
+                    <div class="form-group">
+                        <label for="departure_time">Thời gian khởi hành:</label>
+                        <input type="datetime-local" name="departure_time" class="form-control" required>
+                    </div>
 
-            <input type="submit" value="Dự đoán">
-        </form>
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label for="carrier_code">Hãng bay:</label>
+                            <input type="text" name="carrier_code" class="form-control" maxlength="5" placeholder="VN" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tail_number">Số hiệu máy bay:</label>
+                            <input type="text" name="tail_number" class="form-control" maxlength="10" placeholder="VN-A123" required>
+                        </div>
+                    </div>
 
-        {% if error %}
-        <div class="result-box" style="background:#ffebee; color:#b71c1c; border-color:#ef9a9a;">
-            ⚠️ {{ error }}
+                    <div class="route-section">
+                        <div class="route-header">
+                            <span class="route-icon">🛫</span>
+                            <span class="route-text">Tuyến bay</span>
+                            <span class="route-icon">🛬</span>
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label for="origin_airport">Sân bay đi:</label>
+                                <input type="text" name="origin_airport" class="form-control airport-input" maxlength="5" placeholder="HAN" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="destination_airport">Sân bay đến:</label>
+                                <input type="text" name="destination_airport" class="form-control airport-input" maxlength="5" placeholder="SGN" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột 3: Dữ liệu thời tiết -->
+            <div class="form-column weather-column">
+                <div class="column-header">
+                    <div class="column-icon">🌤️</div>
+                    <h3 class="column-title">Dữ liệu thời tiết</h3>
+                </div>
+                
+                <div class="form-card">
+                    <!-- Thời tiết sân bay đi -->
+                    <div class="weather-section departure-weather">
+                        <div class="weather-header">
+                            <span class="weather-icon">🌡️</span>
+                            <h4 class="weather-title">Sân bay đi</h4>
+                        </div>
+                        <div class="weather-grid">
+                            <div class="form-group weather-item">
+                                <label for="temp_x">Nhiệt độ:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.1" name="temp_x" class="form-control" placeholder="25.5" required>
+                                    <span class="input-unit">°C</span>
+                                </div>
+                            </div>
+                            <div class="form-group weather-item">
+                                <label for="precip_x">Lượng mưa:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.1" name="precip_x" class="form-control" placeholder="0.0" required>
+                                    <span class="input-unit">mm</span>
+                                </div>
+                            </div>
+                            <div class="form-group weather-item">
+                                <label for="wind_x">Tốc độ gió:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.1" name="wind_x" class="form-control" placeholder="15.0" required>
+                                    <span class="input-unit">km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thời tiết sân bay đến -->
+                    <div class="weather-section arrival-weather">
+                        <div class="weather-header">
+                            <span class="weather-icon">🌤️</span>
+                            <h4 class="weather-title">Sân bay đến</h4>
+                        </div>
+                        <div class="weather-grid">
+                            <div class="form-group weather-item">
+                                <label for="temp_y">Nhiệt độ:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.1" name="temp_y" class="form-control" placeholder="28.0" required>
+                                    <span class="input-unit">°C</span>
+                                </div>
+                            </div>
+                            <div class="form-group weather-item">
+                                <label for="precip_y">Lượng mưa:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.1" name="precip_y" class="form-control" placeholder="0.0" required>
+                                    <span class="input-unit">mm</span>
+                                </div>
+                            </div>
+                            <div class="form-group weather-item">
+                                <label for="wind_y">Tốc độ gió:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.1" name="wind_y" class="form-control" placeholder="12.0" required>
+                                    <span class="input-unit">km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
 
-        {% if prediction %}
-        <div class="result-box">
-            ⏱️ Dự đoán độ trễ: {{ prediction }} phút
+        <!-- Phần thông tin chuyến bay trước (ẩn mặc định) -->
+        <div id="prev-flight-fields" class="prev-flight-section" style="display:none;">
+            <div class="prev-flight-card">
+                <div class="column-header">
+                    <div class="column-icon">📋</div>
+                    <h3 class="column-title">Thông tin chuyến bay trước đó</h3>
+                </div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="prev_departure_time">Thời gian xuất phát chuyến trước:</label>
+                        <input type="datetime-local" name="prev_departure_time" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="prev_arrival_time">Thời gian đến chuyến trước:</label>
+                        <input type="datetime-local" name="prev_arrival_time" class="form-control">
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
 
-        {% if form_data and prediction %}
-        <div class="result-box" style="background:#fffde7; color:#795548; border-color:#ffe082; text-align:left;">
-            <b>Thông tin chuyến bay vừa nhập:</b><br>
-            Chế độ dự đoán: {{ form_data.mode }}<br>
-            Thời gian bay dự kiến: {{ form_data.elapsed_time }} phút<br>
-            Thời gian khởi hành: {{ form_data.departure_time|replace('T', ' ') }}<br>
-            Tail Number: {{ form_data.tail_number }}<br>
-            Carrier Code: {{ form_data.carrier_code }}<br>
-            Sân bay đi: {{ form_data.origin_airport }}<br>
-            Sân bay đến: {{ form_data.destination_airport }}<br>
-            <b>Thời tiết sân bay đi:</b>
-            Nhiệt độ: {{ form_data.temp_x }}°C, Mưa: {{ form_data.precip_x }}mm, Gió: {{ form_data.wind_x }}km/h<br>
-            <b>Thời tiết sân bay đến:</b>
-            Nhiệt độ: {{ form_data.temp_y }}°C, Mưa: {{ form_data.precip_y }}mm, Gió: {{ form_data.wind_y }}km/h<br>
-            {% if form_data.mode == "prev_flight" %}
-            <b>Thông tin chuyến trước:</b>
-            Xuất phát: {{ form_data.prev_departure_time|replace('T', ' ') }}<br>
-            Đến nơi: {{ form_data.prev_arrival_time|replace('T', ' ') }}
-            {% endif %}
-            <br>Mô hình ML: {{ form_data.model }}
+        <!-- Nút dự đoán -->
+        <div class="submit-section">
+            <button type="submit" class="btn-predict">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text">Dự đoán độ trễ</span>
+                <span class="btn-arrow">→</span>
+            </button>
         </div>
-        {% endif %}
+    </form>
 
-{% if prev_delay is not none %}
-<div class="result-box" style="background:#e3f2fd; color:#0d47a1;">
-    Độ trễ chuyến bay trước: {{ prev_delay|round(2) }} phút
+    <!-- Kết quả dự đoán -->
+    {% if error %}
+    <div class="result-box error-box">
+        <div class="result-icon">⚠️</div>
+        <div class="result-content">
+            <h3>Lỗi xảy ra</h3>
+            <p>{{ error }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if prediction %}
+    <div class="result-box success-box">
+        <div class="result-icon">⏱️</div>
+        <div class="result-content">
+            <h3>Kết quả dự đoán</h3>
+            <p class="prediction-value">Độ trễ dự kiến: <strong>{{ prediction }} phút</strong></p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if prev_delay is not none %}
+    <div class="result-box info-box">
+        <div class="result-icon">📊</div>
+        <div class="result-content">
+            <h3>Thông tin tham khảo</h3>
+            <p>Độ trễ chuyến bay trước: <strong>{{ prev_delay|round(2) }} phút</strong></p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if arrival_time_str %}
+    <div class="result-box arrival-box">
+        <div class="result-icon">🛬</div>
+        <div class="result-content">
+            <h3>Thời gian đến dự kiến</h3>
+            <p class="arrival-time">{{ arrival_time_str }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if form_data and prediction %}
+    <div class="result-box summary-box">
+        <div class="result-icon">📝</div>
+        <div class="result-content">
+            <h3>Tóm tắt thông tin</h3>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <strong>Chế độ:</strong> {{ form_data.mode }}
+                </div>
+                <div class="summary-item">
+                    <strong>Thời gian bay:</strong> {{ form_data.elapsed_time }} phút
+                </div>
+                <div class="summary-item">
+                    <strong>Khởi hành:</strong> {{ form_data.departure_time|replace('T', ' ') }}
+                </div>
+                <div class="summary-item">
+                    <strong>Chuyến bay:</strong> {{ form_data.carrier_code }} - {{ form_data.tail_number }}
+                </div>
+                <div class="summary-item">
+                    <strong>Tuyến bay:</strong> {{ form_data.origin_airport }} → {{ form_data.destination_airport }}
+                </div>
+                <div class="summary-item">
+                    <strong>Mô hình:</strong> {{ form_data.model }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
-{% endif %}
 
-        {% if arrival_time_str %}
-        <div class="result-box" style="background:#e8f5e9; color:#1b5e20; border-color:#a5d6a7;">
-            🛬 Thời gian đến dự kiến: {{ arrival_time_str }}
-        </div>
-        {% endif %}
 <script>
 function togglePrevFlight() {
     var mode = document.getElementById('mode').value;
-    document.getElementById('prev-flight-fields').style.display = (mode === 'prev_flight') ? 'block' : 'none';
+    var prevFields = document.getElementById('prev-flight-fields');
+    if (mode === 'prev_flight') {
+        prevFields.style.display = 'block';
+        prevFields.style.animation = 'slideDown 0.3s ease-out';
+    } else {
+        prevFields.style.display = 'none';
+    }
 }
-window.onload = togglePrevFlight;
+
+// Khởi tạo khi trang load
+window.onload = function() {
+    togglePrevFlight();
+    
+    // Tự động focus vào field đầu tiên
+    document.getElementById('mode').focus();
+};
+
+// Animation cho form sections
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('.form-section');
+    sections.forEach((section, index) => {
+        section.style.animationDelay = `${index * 0.1}s`;
+        section.classList.add('slide-in');
+    });
+});
 </script>
+
+<style>
+/* Thêm styles cụ thể cho trang này với màu sắc đẹp mắt */
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.page-title {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.page-subtitle {
+    font-size: 1.3rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.prediction-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.prediction-form {
+    margin-bottom: 40px;
+}
+
+/* Form Grid 3 Cột - Thiết kế mới */
+.form-grid-3col {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+    max-width: 1800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-column {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
+
+.column-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 24px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.column-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.column-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.form-card {
+    background: white;
+    border-radius: 0 0 16px 16px;
+    padding: 28px 24px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    border-top: none;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Màu sắc riêng cho từng cột */
+.config-column .column-header {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+}
+
+.config-column .form-card {
+    border-color: rgba(33, 150, 243, 0.2);
+}
+
+.flight-column .column-header {
+    background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+}
+
+.flight-column .form-card {
+    border-color: rgba(76, 175, 80, 0.2);
+}
+
+.weather-column .column-header {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+}
+
+.weather-column .form-card {
+    border-color: rgba(255, 152, 0, 0.2);
+}
+
+/* Form controls hiện đại */
+.modern-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'><polyline points='6,9 12,15 18,9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.input-with-unit {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-unit .form-control {
+    padding-right: 50px;
+    margin-bottom: 0;
+}
+
+.input-unit {
+    position: absolute;
+    right: 12px;
+    color: #666;
+    font-weight: 600;
+    font-size: 0.9rem;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 2px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+/* Grid 2 cột trong form */
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Route section đặc biệt */
+.route-section {
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border-radius: 12px;
+    padding: 20px;
+    border: 2px solid rgba(76, 175, 80, 0.2);
+}
+
+.route-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-weight: 700;
+    color: #2e7d32;
+    font-size: 1.1rem;
+}
+
+.route-icon {
+    font-size: 1.3rem;
+}
+
+.route-text {
+    position: relative;
+}
+
+.route-text::before,
+.route-text::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #4caf50, #81c784);
+}
+
+.route-text::before {
+    left: -45px;
+}
+
+.route-text::after {
+    right: -45px;
+}
+
+.airport-input {
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+/* Weather sections */
+.weather-section {
+    background: rgba(255, 152, 0, 0.05);
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid rgba(255, 152, 0, 0.2);
+    margin-bottom: 16px;
+}
+
+.departure-weather {
+    background: rgba(33, 150, 243, 0.05);
+    border-color: rgba(33, 150, 243, 0.2);
+}
+
+.arrival-weather {
+    background: rgba(156, 39, 176, 0.05);
+    border-color: rgba(156, 39, 176, 0.2);
+}
+
+.weather-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.weather-icon {
+    font-size: 1.4rem;
+}
+
+.weather-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.weather-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.weather-item {
+    margin-bottom: 0;
+}
+
+/* Previous flight section */
+.prev-flight-card {
+    background: linear-gradient(145deg, #f3e5f5 0%, #e1bee7 100%);
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid rgba(156, 39, 176, 0.2);
+    box-shadow: 0 8px 25px rgba(156, 39, 176, 0.1);
+}
+
+.prev-flight-card .column-header {
+    background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+    margin: -24px -24px 20px -24px;
+    border-radius: 16px 16px 0 0;
+}
+
+/* Nút dự đoán cải tiến */
+.btn-predict {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 20px 50px;
+    border-radius: 50px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 10px 30px rgba(102, 126, 234, 0.4),
+        0 4px 15px rgba(102, 126, 234, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 300px;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-text {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.btn-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-predict:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+.btn-predict::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s;
+}
+
+.btn-predict:hover::before {
+    left: 100%;
+}
+
+.btn-predict:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 
+        0 20px 50px rgba(102, 126, 234, 0.5),
+        0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+    .form-grid-3col {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+    
+    .weather-column {
+        grid-column: 1 / -1;
+    }
+    
+    .weather-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .form-grid-3col {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .weather-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .route-text::before,
+    .route-text::after {
+        display: none;
+    }
+    
+    .btn-predict {
+        width: 100%;
+        min-width: auto;
+        padding: 18px 30px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .column-header {
+        padding: 16px 20px;
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+    
+    .column-icon {
+        font-size: 2rem;
+    }
+    
+    .column-title {
+        font-size: 1.1rem;
+    }
+    
+    .form-card {
+        padding: 20px 16px;
+        min-height: auto;
+    }
+    
+    .weather-section {
+        padding: 16px 12px;
+    }
+    
+    .route-section {
+        padding: 16px;
+    }
+    
+    .input-unit {
+        position: static;
+        margin-left: 8px;
+        background: none;
+        padding: 0;
+    }
+    
+    .input-with-unit {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .input-with-unit .form-control {
+        padding-right: 16px;
+        margin-bottom: 4px;
+    }
+}
+
+.prev-flight-section {
+    margin: 40px 0;
+    animation: slideDown 0.4s ease-out;
+}
+
+.prev-flight-section .form-section {
+    background: linear-gradient(145deg, #f3e5f5 0%, #e1bee7 100%);
+    border-left: 5px solid #9c27b0;
+    --section-color: #9c27b0;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.submit-section {
+    text-align: center;
+    margin: 60px 0 40px 0;
+}
+
+.btn-predict {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 20px 60px;
+    border-radius: 50px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 10px 30px rgba(102, 126, 234, 0.4),
+        0 4px 15px rgba(102, 126, 234, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 280px;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-predict::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s;
+}
+
+.btn-predict:hover::before {
+    left: 100%;
+}
+
+.btn-predict:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 
+        0 20px 50px rgba(102, 126, 234, 0.5),
+        0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.btn-icon {
+    font-size: 1.4rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+    60% { transform: translateY(-3px); }
+}
+
+.result-box {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin: 30px 0;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.1),
+        0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: flex-start;
+    gap: 25px;
+    border-left: 6px solid #2196f3;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.result-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, 
+        var(--result-color, #2196f3) 0%, 
+        rgba(255,255,255,0.3) 50%, 
+        var(--result-color, #2196f3) 100%);
+}
+
+.result-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.15),
+        0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.result-icon {
+    font-size: 2.5rem;
+    min-width: 50px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.result-content h3 {
+    margin: 0 0 12px 0;
+    color: #2d3748;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.result-content p {
+    margin: 6px 0;
+    color: #4a5568;
+    font-size: 1.1rem;
+}
+
+.error-box {
+    border-left-color: #f44336;
+    background: linear-gradient(145deg, #ffebee 0%, #ffcdd2 100%);
+    --result-color: #f44336;
+}
+
+.error-box .result-content h3 {
+    color: #c62828;
+}
+
+.success-box {
+    border-left-color: #4caf50;
+    background: linear-gradient(145deg, #e8f5e9 0%, #c8e6c9 100%);
+    --result-color: #4caf50;
+}
+
+.success-box .result-content h3 {
+    color: #2e7d32;
+}
+
+.info-box {
+    border-left-color: #ff9800;
+    background: linear-gradient(145deg, #fff3e0 0%, #ffe0b2 100%);
+    --result-color: #ff9800;
+}
+
+.info-box .result-content h3 {
+    color: #ef6c00;
+}
+
+.arrival-box {
+    border-left-color: #9c27b0;
+    background: linear-gradient(145deg, #f3e5f5 0%, #e1bee7 100%);
+    --result-color: #9c27b0;
+}
+
+.arrival-box .result-content h3 {
+    color: #7b1fa2;
+}
+
+.summary-box {
+    border-left-color: #607d8b;
+    background: linear-gradient(145deg, #eceff1 0%, #cfd8dc 100%);
+    --result-color: #607d8b;
+}
+
+.summary-box .result-content h3 {
+    color: #455a64;
+}
+
+.prediction-value {
+    font-size: 1.5rem;
+    color: #2e7d32 !important;
+    font-weight: 800;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.arrival-time {
+    font-size: 1.3rem;
+    color: #7b1fa2 !important;
+    font-weight: 700;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.summary-item {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(96, 125, 139, 0.2);
+    transition: all 0.2s ease;
+}
+
+.summary-item:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.slide-in {
+    animation: slideIn 0.8s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive cho tablet */
+@media (max-width: 1200px) {
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .weather-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .weather-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .btn-predict {
+        width: 100%;
+        padding: 18px 30px;
+        font-size: 1.2rem;
+    }
+    
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-box {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .page-header {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+
+/* Animation khi load trang */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.prediction-container {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Hiệu ứng cho form controls */
+.form-control:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient cho labels */
+label {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 600;
+}
+</style>
 {% endblock %}

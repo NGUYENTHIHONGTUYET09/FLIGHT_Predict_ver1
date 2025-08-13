@@ -84,7 +84,11 @@
         <div class="logo">🛫 FlightDelay</div>
         <ul>
             <li><a href="{{ url_for('index') }}">Trang chủ</a></li>
+            {% if user %}
+            <li><a href="{{ url_for('predict') }}">Dự đoán</a></li>
+            {% else %}
             <li><a href="#" onclick="checkPredictAccess()">Dự đoán</a></li>
+            {% endif %}
             <li><a href="{{ url_for('chat') }}">Chat</a></li>
             {% if user and user.role == 'admin' %}
             <li><a href="{{ url_for('admin_dashboard') }}">Quản trị</a></li>
@@ -158,6 +162,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
     
     <script>
     function openAuthModal() {
@@ -197,15 +202,16 @@
             closeAuthModal();
         }
     });
-    
+
     // Auto open modal if there's an error
-    {% if error and not user %}
-    window.onload = function() {
-        openAuthModal();
-    };
-    {% endif %}
-    </script>
-    {% endif %}
+</script>
+{% if error and not user %}
+<script>
+window.onload = function() {
+    openAuthModal();
+};
+</script>
+{% endif %}
     
     <!-- Predict Confirmation Modal -->
     <div id="predictModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
@@ -229,23 +235,23 @@
             </div>
         </div>
     </div>
-    
+
     <script>
+    // Pass user status from Flask to JS
+    var isUserLoggedIn = {{ (1 if user else 0) | tojson | safe }};
     function checkPredictAccess() {
-        {% if user %}
-            // User đã đăng nhập, cho phép truy cập dự đoán
+        if (isUserLoggedIn === 1) {
             window.location.href = "{{ url_for('predict') }}";
-        {% else %}
-            // User chưa đăng nhập, hiện modal xác nhận
+        } else {
             document.getElementById('predictModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
-        {% endif %}
+        }
     }
-    
+
     function confirmPredict(choice) {
         document.getElementById('predictModal').style.display = 'none';
         document.body.style.overflow = 'auto';
-        
+
         if (choice) {
             // User chọn "Có" - mở modal đăng nhập
             openAuthModal();
@@ -254,7 +260,7 @@
             window.location.href = "{{ url_for('index') }}";
         }
     }
-    
+
     // Close modal when clicking outside
     document.getElementById('predictModal').addEventListener('click', function(e) {
         if (e.target === this) {
@@ -263,10 +269,7 @@
     });
     </script>
     
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
-    </div>
+    {% block content %}{% endblock %}
     <div class="footer">
         &copy; 2025 FlightDelay Team. All rights reserved.
     </div>

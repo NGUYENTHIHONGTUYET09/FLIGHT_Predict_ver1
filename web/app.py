@@ -128,16 +128,16 @@ def predict():
     form_data = {}
     prev_delay = None
     user = get_current_user()
-    
+
     # Bắt buộc đăng nhập mới được dự đoán
     if not user:
         flash("Bạn cần đăng nhập để sử dụng chức năng dự đoán.")
         return redirect(url_for("signin"))
-    
+
     if request.method == "POST":
         form_data = request.form.to_dict()
         mode = request.form.get("mode", "normal")
-        
+
         input_data = {
             "scheduled_elapsed_time": int(request.form["elapsed_time"]),
             "scheduled_departure_dt": request.form["departure_time"],
@@ -156,7 +156,7 @@ def predict():
             "email": user["email"],
             "model": request.form["model"]
         }
-        
+
         if mode == "prev_flight":
             prev_departure = request.form.get("prev_departure_time")
             prev_arrival = request.form.get("prev_arrival_time")
@@ -166,7 +166,7 @@ def predict():
                 scheduled_elapsed = int(request.form["elapsed_time"])
                 prev_delay = (prev_arrival_dt - prev_departure_dt).total_seconds() / 60 - scheduled_elapsed
                 input_data["prev_delay"] = prev_delay
-        
+
         user_df = pd.DataFrame([input_data])
         try:
             prediction = predict_delay(request.form['model'], user_df)
@@ -174,7 +174,7 @@ def predict():
             total_minutes = int(request.form["elapsed_time"]) + float(prediction)
             arrival_time = departure_time + timedelta(minutes=total_minutes)
             arrival_time_str = arrival_time.strftime("%H:%M, %d/%m/%Y")
-            
+
             # Lưu dữ liệu dự đoán
             prediction_record = {
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -203,11 +203,11 @@ def predict():
                 }
             }
             save_prediction_data(prediction_record)
-            
+
         except Exception as e:
             error = f"Lỗi khi dự đoán: {e}"
-    
-    return render_template("predict.html", prediction=prediction, error=error, arrival_time_str=arrival_time_str, form_data=form_data, prev_delay=prev_delay, user=user)
+
+    return render_template("index_new.html", prediction=prediction, error=error, arrival_time_str=arrival_time_str, form_data=form_data, prev_delay=prev_delay, user=user)
 
 # Trang chat hỗ trợ
 def get_bot_response(message):
