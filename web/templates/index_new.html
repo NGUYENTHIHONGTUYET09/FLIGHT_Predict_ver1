@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="main-container">
+    <h1 class="page-title">✈️ Dự đoán độ trễ chuyến bay</h1>
+    <form method="POST" class="prediction-form">
+        <div class="form-grid">
+            <!-- Cột 1: Chế độ & Mô hình -->
+            <div class="form-section">
+                <div class="section-title"><span>🔧</span> Chế độ & Mô hình</div>
+                <label>Chọn chế độ dự đoán:</label>
+                <select id="mode" name="mode" onchange="togglePrevFlight()">
+                    <option value="normal">Dự đoán thông thường</option>
+                    <option value="prev_flight">Dự đoán dựa trên chuyến bay trước</option>
+                </select>
+                <label>Chọn mô hình ML:</label>
+                <select name="model" required>
+                    <option value="LinearRegression_model">Linear Regression</option>
+                    <option value="RandomForest_model">Random Forest</option>
+                    <option value="XGBoost_model">XGBoost</option>
+                    <option value="LightGBM_model">LightGBM</option>
+                </select>
+            </div>
+
+            <!-- Cột 2: Thông tin chuyến bay -->
+            <div class="form-section">
+                <div class="section-title"><span>🛫</span> Thông tin chuyến bay</div>
+                <label>Thời gian bay dự kiến (phút):</label>
+                <input type="number" name="elapsed_time" min="1" required>
+                <label>Thời gian khởi hành:</label>
+                <input type="datetime-local" name="departure_time" required>
+                <label>Tail Number:</label>
+                <input type="text" name="tail_number" maxlength="10" required>
+                <label>Carrier Code:</label>
+                <input type="text" name="carrier_code" maxlength="5" required>
+                <label>Origin Airport:</label>
+                <input type="text" name="origin_airport" maxlength="5" required>
+                <label>Destination Airport:</label>
+                <input type="text" name="destination_airport" maxlength="5" required>
+            </div>
+
+            <!-- Cột 3: Thời tiết -->
+            <div class="form-section">
+                <div class="section-title"><span>🌦️</span> Thời tiết sân bay đi</div>
+                <label>Nhiệt độ (°C):</label>
+                <input type="number" step="0.1" name="temp_x" required>
+                <label>Lượng mưa (mm):</label>
+                <input type="number" step="0.1" name="precip_x" required>
+                <label>Tốc độ gió (km/h):</label>
+                <input type="number" step="0.1" name="wind_x" required>
+
+                <div class="section-title"><span>🌦️</span> Thời tiết sân bay đến</div>
+                <label>Nhiệt độ (°C):</label>
+                <input type="number" step="0.1" name="temp_y" required>
+                <label>Lượng mưa (mm):</label>
+                <input type="number" step="0.1" name="precip_y" required>
+                <label>Tốc độ gió (km/h):</label>
+                <input type="number" step="0.1" name="wind_y" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary">🚀 Dự đoán độ trễ chuyến bay</button>
+    </form>
+</div>
+
+<style>
+    .main-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        width: 100%;
+        max-width: 1400px;
+    }
+
+    .form-section {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    input, select {
+        width: 100%; /* Mở rộng chiều ngang của các form */
+        padding: 10px;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-primary {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #ff6f61;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #e64a45;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #ffdd57;
+    }
+
+    label {
+        font-size: 14px;
+        margin-bottom: 5px;
+        display: block;
+    }
+</style>
+
+{% if error %}
+<div class="result-box" style="background:#ffebee; color:#b71c1c; border-color:#ef9a9a;">
+    ⚠️ {{ error }}
+</div>
+{% endif %}
+
+{% if prediction %}
+<div class="result-box">
+    ⏱️ Dự đoán độ trễ: {{ prediction }} phút
+</div>
+{% endif %}
+
+{% if form_data and prediction %}
+<div class="result-box" style="background:#fffde7; color:#795548; border-color:#ffe082; text-align:left;">
+    <b>Thông tin chuyến bay vừa nhập:</b><br>
+    Chế độ dự đoán: {{ form_data.mode }}<br>
+    Thời gian bay dự kiến: {{ form_data.elapsed_time }} phút<br>
+    Thời gian khởi hành: {{ form_data.departure_time|replace('T', ' ') }}<br>
+    Tail Number: {{ form_data.tail_number }}<br>
+    Carrier Code: {{ form_data.carrier_code }}<br>
+    Sân bay đi: {{ form_data.origin_airport }}<br>
+    Sân bay đến: {{ form_data.destination_airport }}<br>
+    <b>Thời tiết sân bay đi:</b>
+    Nhiệt độ: {{ form_data.temp_x }}°C, Mưa: {{ form_data.precip_x }}mm, Gió: {{ form_data.wind_x }}km/h<br>
+    <b>Thời tiết sân bay đến:</b>
+    Nhiệt độ: {{ form_data.temp_y }}°C, Mưa: {{ form_data.precip_y }}mm, Gió: {{ form_data.wind_y }}km/h<br>
+    {% if form_data.mode == "prev_flight" %}
+    <b>Thông tin chuyến trước:</b>
+    Xuất phát: {{ form_data.prev_departure_time|replace('T', ' ') }}<br>
+    Đến nơi: {{ form_data.prev_arrival_time|replace('T', ' ') }}
+    {% endif %}
+    <br>Mô hình ML: {{ form_data.model }}
+</div>
+{% endif %}
+
+{% if prev_delay is not none %}
+<div class="result-box" style="background:#e3f2fd; color:#0d47a1;">
+    Độ trễ chuyến bay trước: {{ prev_delay|round(2) }} phút
+</div>
+{% endif %}
+
+{% if arrival_time_str %}
+<div class="result-box" style="background:#e8f5e9; color:#1b5e20; border-color:#a5d6a7;">
+    🛬 Thời gian đến dự kiến: {{ arrival_time_str }}
+</div>
+{% endif %}
+
+<script>
+function togglePrevFlight() {
+    var mode = document.getElementById('mode').value;
+    document.getElementById('prev-flight-fields').style.display = (mode === 'prev_flight') ? 'block' : 'none';
+}
+
+// Nhập dữ liệu từ file JSON
+function loadFromJSON() {
+    const fileInput = document.getElementById('jsonFileInput');
+    const file = fileInput.files[0];
+    
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            
+            // Điền dữ liệu vào form
+            if (data.mode) document.getElementsByName('mode')[0].value = data.mode;
+            if (data.elapsed_time) document.getElementsByName('elapsed_time')[0].value = data.elapsed_time;
+            if (data.departure_time) document.getElementsByName('departure_time')[0].value = data.departure_time;
+            if (data.tail_number) document.getElementsByName('tail_number')[0].value = data.tail_number;
+            if (data.carrier_code) document.getElementsByName('carrier_code')[0].value = data.carrier_code;
+            if (data.origin_airport) document.getElementsByName('origin_airport')[0].value = data.origin_airport;
+            if (data.destination_airport) document.getElementsByName('destination_airport')[0].value = data.destination_airport;
+            if (data.temp_x) document.getElementsByName('temp_x')[0].value = data.temp_x;
+            if (data.precip_x) document.getElementsByName('precip_x')[0].value = data.precip_x;
+            if (data.wind_x) document.getElementsByName('wind_x')[0].value = data.wind_x;
+            if (data.temp_y) document.getElementsByName('temp_y')[0].value = data.temp_y;
+            if (data.precip_y) document.getElementsByName('precip_y')[0].value = data.precip_y;
+            if (data.wind_y) document.getElementsByName('wind_y')[0].value = data.wind_y;
+            if (data.model) document.getElementsByName('model')[0].value = data.model;
+            if (data.prev_departure_time) document.getElementsByName('prev_departure_time')[0].value = data.prev_departure_time;
+            if (data.prev_arrival_time) document.getElementsByName('prev_arrival_time')[0].value = data.prev_arrival_time;
+            
+            togglePrevFlight(); // Cập nhật hiển thị fields chuyến bay trước
+            alert('✅ Đã tải dữ liệu từ file JSON thành công!');
+        } catch (error) {
+            alert('❌ Lỗi: File JSON không hợp lệ!');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Xuất dữ liệu form thành file JSON
+function exportToJSON() {
+    const formData = {
+        mode: document.getElementsByName('mode')[0].value,
+        elapsed_time: document.getElementsByName('elapsed_time')[0].value,
+        departure_time: document.getElementsByName('departure_time')[0].value,
+        tail_number: document.getElementsByName('tail_number')[0].value,
+        carrier_code: document.getElementsByName('carrier_code')[0].value,
+        origin_airport: document.getElementsByName('origin_airport')[0].value,
+        destination_airport: document.getElementsByName('destination_airport')[0].value,
+        temp_x: document.getElementsByName('temp_x')[0].value,
+        precip_x: document.getElementsByName('precip_x')[0].value,
+        wind_x: document.getElementsByName('wind_x')[0].value,
+        temp_y: document.getElementsByName('temp_y')[0].value,
+        precip_y: document.getElementsByName('precip_y')[0].value,
+        wind_y: document.getElementsByName('wind_y')[0].value,
+        model: document.getElementsByName('model')[0].value,
+        prev_departure_time: document.getElementsByName('prev_departure_time')[0].value,
+        prev_arrival_time: document.getElementsByName('prev_arrival_time')[0].value,
+        export_time: new Date().toISOString(),
+        export_date: new Date().toLocaleDateString('vi-VN')
+    };
+    
+    const jsonString = JSON.stringify(formData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const fileName = prompt('Nhập tên file (không cần .json):', 'flight_data_' + new Date().toISOString().slice(0,10));
+    if (fileName) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+}
+
+// Xuất PDF
+function exportToPDF() {
+    const fileName = prompt('Nhập tên file PDF:', 'flight_prediction_' + new Date().toISOString().slice(0,10));
+    if (!fileName) return;
+    
+    // Thu thập dữ liệu form
+    const formData = {
+        mode: document.getElementsByName('mode')[0].value,
+        elapsed_time: document.getElementsByName('elapsed_time')[0].value,
+        departure_time: document.getElementsByName('departure_time')[0].value,
+        tail_number: document.getElementsByName('tail_number')[0].value,
+        carrier_code: document.getElementsByName('carrier_code')[0].value,
+        origin_airport: document.getElementsByName('origin_airport')[0].value,
+        destination_airport: document.getElementsByName('destination_airport')[0].value,
+        temp_x: document.getElementsByName('temp_x')[0].value,
+        precip_x: document.getElementsByName('precip_x')[0].value,
+        wind_x: document.getElementsByName('wind_x')[0].value,
+        temp_y: document.getElementsByName('temp_y')[0].value,
+        precip_y: document.getElementsByName('precip_y')[0].value,
+        wind_y: document.getElementsByName('wind_y')[0].value,
+        model: document.getElementsByName('model')[0].value,
+        prev_departure_time: document.getElementsByName('prev_departure_time')[0].value,
+        prev_arrival_time: document.getElementsByName('prev_arrival_time')[0].value
+    };
+    
+    // Tạo nội dung PDF
+    const currentTime = new Date();
+    const exportTime = currentTime.toLocaleString('vi-VN');
+    
+    const pdfContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Báo cáo Dự đoán Chuyến bay</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { text-align: center; color: #1976d2; margin-bottom: 30px; }
+        .info-section { margin: 15px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .info-title { font-weight: bold; color: #1976d2; margin-bottom: 8px; }
+        .export-info { text-align: center; color: #666; font-size: 12px; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✈️ BÁO CÁO DỰ ĐOÁN ĐỘ TRỄ CHUYẾN BAY</h1>
+    </div>
+    
+    <div class="info-section">
+        <div class="info-title">🔧 Thông tin dự đoán</div>
+        <p><strong>Chế độ:</strong> ${formData.mode === 'normal' ? 'Dự đoán thông thường' : 'Dự đoán dựa trên chuyến bay trước'}</p>
+        <p><strong>Mô hình ML:</strong> ${formData.model}</p>
+    </div>
+    
+    <div class="info-section">
+        <div class="info-title">🛫 Thông tin chuyến bay</div>
+        <p><strong>Thời gian bay dự kiến:</strong> ${formData.elapsed_time} phút</p>
+        <p><strong>Thời gian khởi hành:</strong> ${formData.departure_time?.replace('T', ' ') || 'Chưa nhập'}</p>
+        <p><strong>Tail Number:</strong> ${formData.tail_number}</p>
+        <p><strong>Carrier Code:</strong> ${formData.carrier_code}</p>
+        <p><strong>Sân bay đi:</strong> ${formData.origin_airport}</p>
+        <p><strong>Sân bay đến:</strong> ${formData.destination_airport}</p>
+    </div>
+    
+    <div class="info-section">
+        <div class="info-title">🌦️ Thông tin thời tiết</div>
+        <p><strong>Sân bay đi:</strong> Nhiệt độ ${formData.temp_x}°C, Mưa ${formData.precip_x}mm, Gió ${formData.wind_x}km/h</p>
+        <p><strong>Sân bay đến:</strong> Nhiệt độ ${formData.temp_y}°C, Mưa ${formData.precip_y}mm, Gió ${formData.wind_y}km/h</p>
+    </div>
+    
+    ${formData.mode === 'prev_flight' && formData.prev_departure_time ? `
+    <div class="info-section">
+        <div class="info-title">⏮️ Thông tin chuyến bay trước</div>
+        <p><strong>Thời gian xuất phát:</strong> ${formData.prev_departure_time?.replace('T', ' ') || 'Chưa nhập'}</p>
+        <p><strong>Thời gian đến:</strong> ${formData.prev_arrival_time?.replace('T', ' ') || 'Chưa nhập'}</p>
+    </div>
+    ` : ''}
+    
+    <div class="export-info">
+        <p><strong>Thời gian xuất báo cáo:</strong> ${exportTime}</p>
+        <p><strong>Tên file:</strong> ${fileName}.pdf</p>
+        <p>Hệ thống Dự đoán Độ trễ Chuyến bay - Flight Prediction System</p>
+    </div>
+</body>
+</html>`;
+    
+    // Tạo và tải PDF
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(pdfContent);
+    printWindow.document.close();
+    
+    printWindow.onload = function() {
+        printWindow.print();
+        setTimeout(() => printWindow.close(), 1000);
+    };
+}
+
+window.onload = togglePrevFlight;
+</script>
+
+{% endblock %}

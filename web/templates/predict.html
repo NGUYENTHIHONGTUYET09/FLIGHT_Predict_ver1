@@ -1,21 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
-<h2 style="text-align:center; color:#1a73e8; margin-bottom:24px;">Dự đoán độ trễ chuyến bay</h2>
+<h2 style="text-align:center; color:#ffffff; margin-bottom:24px;">✈️ Dự đoán độ trễ chuyến bay</h2>
 
 <style>
+    html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #4a90e2 0%, #6a9cf2 100%);
+        font-family: Arial, sans-serif;
+    }
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+        width: 100vw;
+        height: calc(100vh - 80px);
+        max-width: 100vw;
+        padding: 40px 32px;
+        box-sizing: border-box;
+        margin: 0;
+        background: transparent;
+    }
     label {
         display: block;
-        margin-top: 12px;
-        margin-bottom: 4px;
-        color: #333;
+        margin-bottom: 8px;
+        color: #ffffff;
         font-weight: 500;
     }
     input, select {
         width: 100%;
-        padding: 8px 10px;
+        padding: 12px;
         border: 1px solid #cfd8dc;
         border-radius: 6px;
-        margin-bottom: 8px;
+        margin-bottom: 18px;
         font-size: 1rem;
         box-sizing: border-box;
     }
@@ -32,82 +51,81 @@
         background: #1761c7;
     }
     .section-title {
-        margin-top: 18px;
-        color: #1761c7;
-        font-size: 1.08rem;
+        color: #ffffff;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
     }
-    .result-box {
-        background: #e3f2fd;
-        border: 1.5px solid #90caf9;
-        border-radius: 8px;
-        padding: 18px 14px;
-        margin-top: 24px;
-        text-align: center;
-        font-size: 1.25rem;
-        color: #0d47a1;
-        font-weight: bold;
-        box-shadow: 0 2px 8px rgba(26,115,232,0.07);
+    @media (max-width: 1024px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+            padding: 24px 8px;
+            height: auto;
+        }
     }
 </style>
 
-<form method="POST">
-    <label>Chọn chế độ dự đoán:</label>
-    <select id="mode" name="mode" onchange="togglePrevFlight()">
-        <option value="normal">Dự đoán thông thường</option>
-        <option value="prev_flight">Dự đoán dựa trên chuyến bay trước</option>
-    </select>
+<form method="POST" class="form-grid">
+    <div>
+        <label>Chọn chế độ dự đoán:</label>
+        <select id="mode" name="mode" onchange="togglePrevFlight()">
+            <option value="normal">Dự đoán thông thường</option>
+            <option value="prev_flight">Dự đoán dựa trên chuyến bay trước</option>
+        </select>
 
-    <label>Thời gian bay dự kiến (phút):</label>
-    <input type="number" name="elapsed_time" min="1" required>
-
-    <label>Thời gian khởi hành:</label>
-    <input type="datetime-local" name="departure_time" required>
-
-    <label>Tail Number:</label>
-    <input type="text" name="tail_number" maxlength="10" required>
-
-    <label>Carrier Code:</label>
-    <input type="text" name="carrier_code" maxlength="5" required>
-
-    <label>Origin Airport:</label>
-    <input type="text" name="origin_airport" maxlength="5" required>
-
-    <label>Destination Airport:</label>
-    <input type="text" name="destination_airport" maxlength="5" required>
-
-    <div class="section-title">Dữ liệu thời tiết (sân bay đi):</div>
-    <label>Nhiệt độ (°C):</label>
-    <input type="number" step="0.1" name="temp_x" required>
-    <label>Lượng mưa (mm):</label>
-    <input type="number" step="0.1" name="precip_x" required>
-    <label>Tốc độ gió (km/h):</label>
-    <input type="number" step="0.1" name="wind_x" required>
-
-    <div class="section-title">Dữ liệu thời tiết (sân bay đến):</div>
-    <label>Nhiệt độ (°C):</label>
-    <input type="number" step="0.1" name="temp_y" required>
-    <label>Lượng mưa (mm):</label>
-    <input type="number" step="0.1" name="precip_y" required>
-    <label>Tốc độ gió (km/h):</label>
-    <input type="number" step="0.1" name="wind_y" required>
-
-    <div id="prev-flight-fields" style="display:none;">
-        <div class="section-title">Thông tin chuyến bay trước đó:</div>
-        <label>Thời gian xuất phát chuyến trước:</label>
-        <input type="datetime-local" name="prev_departure_time">
-        <label>Thời gian đến chuyến trước:</label>
-        <input type="datetime-local" name="prev_arrival_time">
+        <label>Chọn mô hình ML:</label>
+        <select name="model" required>
+            <option value="LinearRegression_model">Linear Regression</option>
+            <option value="RandomForest_model">Random Forest</option>
+            <option value="XGBoost_model">XGBoost</option>
+            <option value="LightGBM_model">LightGBM</option>
+        </select>
     </div>
 
-    <label>Chọn mô hình ML:</label>
-    <select name="model" required>
-        <option value="LinearRegression_model">Linear Regression</option>
-        <option value="RandomForest_model">Random Forest</option>
-        <option value="XGBoost_model">XGBoost</option>
-        <option value="LightGBM_model">LightGBM</option>
-    </select>
+    <div>
+        <label>Thời gian bay dự kiến (phút):</label>
+        <input type="number" name="elapsed_time" min="1" required>
 
-    <input type="submit" value="Dự đoán">
+        <label>Thời gian khởi hành:</label>
+        <input type="datetime-local" name="departure_time" required>
+
+        <label>Tail Number:</label>
+        <input type="text" name="tail_number" maxlength="10" required>
+
+        <label>Carrier Code:</label>
+        <input type="text" name="carrier_code" maxlength="5" required>
+
+        <label>Origin Airport:</label>
+        <input type="text" name="origin_airport" maxlength="5" required>
+
+        <label>Destination Airport:</label>
+        <input type="text" name="destination_airport" maxlength="5" required>
+    </div>
+
+    <div>
+        <div class="section-title">Dữ liệu thời tiết (sân bay đi):</div>
+        <label>Nhiệt độ (°C):</label>
+        <input type="number" step="0.1" name="temp_x" required>
+        <label>Lượng mưa (mm):</label>
+        <input type="number" step="0.1" name="precip_x" required>
+        <label>Tốc độ gió (km/h):</label>
+        <input type="number" step="0.1" name="wind_x" required>
+
+        <div class="section-title">Dữ liệu thời tiết (sân bay đến):</div>
+        <label>Nhiệt độ (°C):</label>
+        <input type="number" step="0.1" name="temp_y" required>
+        <label>Lượng mưa (mm):</label>
+        <input type="number" step="0.1" name="precip_y" required>
+        <label>Tốc độ gió (km/h):</label>
+        <input type="number" step="0.1" name="wind_y" required>
+    </div>
+
+    <div id="prev-flight-fields" style="display:none; grid-column: 1 / span 3; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 18px; margin-bottom: 18px;">
+        <div class="section-title">Thông tin chuyến bay trước</div>
+        <label>Thời gian khởi hành chuyến trước:</label>
+        <input type="datetime-local" name="prev_departure_time">
+        <label>Thời gian đến nơi chuyến trước:</label>
+        <input type="datetime-local" name="prev_arrival_time">
+    </div>
 </form>
 
 {% if error %}
@@ -137,9 +155,9 @@
     <b>Thời tiết sân bay đến:</b>
     Nhiệt độ: {{ form_data.temp_y }}°C, Mưa: {{ form_data.precip_y }}mm, Gió: {{ form_data.wind_y }}km/h<br>
     {% if form_data.mode == "prev_flight" %}
-    <b>Thông tin chuyến trước:</b>
+    <b>Thông tin chuyến trước:</b><br>
     Xuất phát: {{ form_data.prev_departure_time|replace('T', ' ') }}<br>
-    Đến nơi: {{ form_data.prev_arrival_time|replace('T', ' ') }}
+    Đến nơi: {{ form_data.prev_arrival_time|replace('T', ' ') }}<br>
     {% endif %}
     <br>Mô hình ML: {{ form_data.model }}
 </div>
