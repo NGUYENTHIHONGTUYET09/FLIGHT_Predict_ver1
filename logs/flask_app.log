@@ -1,0 +1,138 @@
+2025-08-16 21:44:35,869 ERROR app Thread-11 : Prediction failed
+Traceback (most recent call last):
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2192, in objects_to_datetime64ns
+    values, tz_parsed = conversion.datetime_to_datetime64(data.ravel("K"))
+  File "pandas\_libs\tslibs\conversion.pyx", line 359, in pandas._libs.tslibs.conversion.datetime_to_datetime64
+TypeError: Unrecognized value type: <class 'str'>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "web/app.py", line 186, in predict
+    prediction = predict_delay(request.form['model'], user_df)
+  File "D:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\services\predictor.py", line 66, in predict_delay
+    X_user, _ = preprocess_data(user_df)
+  File "D:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\services\utils.py", line 10, in preprocess_data
+    df['scheduled_departure_dt'] = pd.to_datetime(df['scheduled_departure_dt'])
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\tools\datetimes.py", line 887, in to_datetime
+    values = convert_listlike(arg._values, format)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\tools\datetimes.py", line 408, in _convert_listlike_datetimes
+    allow_object=True,
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2198, in objects_to_datetime64ns
+    raise err
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2187, in objects_to_datetime64ns
+    allow_mixed=allow_mixed,
+  File "pandas\_libs\tslib.pyx", line 379, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 611, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 749, in pandas._libs.tslib._array_to_datetime_object
+  File "pandas\_libs\tslib.pyx", line 740, in pandas._libs.tslib._array_to_datetime_object
+  File "pandas\_libs\tslibs\parsing.pyx", line 257, in pandas._libs.tslibs.parsing.parse_datetime_string
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 1356, in parse
+    return DEFAULTPARSER.parse(timestr, **kwargs)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 653, in parse
+    ret = self._build_naive(res, default)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 1227, in _build_naive
+    naive = default.replace(**repl)
+ValueError: year 76675 is out of range
+2025-08-16 21:44:53,341 ERROR app Thread-12 : Prediction failed
+Traceback (most recent call last):
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2192, in objects_to_datetime64ns
+    values, tz_parsed = conversion.datetime_to_datetime64(data.ravel("K"))
+  File "pandas\_libs\tslibs\conversion.pyx", line 359, in pandas._libs.tslibs.conversion.datetime_to_datetime64
+TypeError: Unrecognized value type: <class 'str'>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "web/app.py", line 186, in predict
+    prediction = predict_delay(request.form['model'], user_df)
+  File "D:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\services\predictor.py", line 66, in predict_delay
+    X_user, _ = preprocess_data(user_df)
+  File "D:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\services\utils.py", line 10, in preprocess_data
+    df['scheduled_departure_dt'] = pd.to_datetime(df['scheduled_departure_dt'])
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\tools\datetimes.py", line 887, in to_datetime
+    values = convert_listlike(arg._values, format)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\tools\datetimes.py", line 408, in _convert_listlike_datetimes
+    allow_object=True,
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2198, in objects_to_datetime64ns
+    raise err
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2187, in objects_to_datetime64ns
+    allow_mixed=allow_mixed,
+  File "pandas\_libs\tslib.pyx", line 379, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 611, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 749, in pandas._libs.tslib._array_to_datetime_object
+  File "pandas\_libs\tslib.pyx", line 740, in pandas._libs.tslib._array_to_datetime_object
+  File "pandas\_libs\tslibs\parsing.pyx", line 257, in pandas._libs.tslibs.parsing.parse_datetime_string
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 1356, in parse
+    return DEFAULTPARSER.parse(timestr, **kwargs)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 653, in parse
+    ret = self._build_naive(res, default)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 1227, in _build_naive
+    naive = default.replace(**repl)
+ValueError: year 76675 is out of range
+2025-08-16 21:45:06,212 ERROR app Thread-13 : Prediction failed
+Traceback (most recent call last):
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2192, in objects_to_datetime64ns
+    values, tz_parsed = conversion.datetime_to_datetime64(data.ravel("K"))
+  File "pandas\_libs\tslibs\conversion.pyx", line 359, in pandas._libs.tslibs.conversion.datetime_to_datetime64
+TypeError: Unrecognized value type: <class 'str'>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "web/app.py", line 186, in predict
+    prediction = predict_delay(request.form['model'], user_df)
+  File "D:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\services\predictor.py", line 66, in predict_delay
+    X_user, _ = preprocess_data(user_df)
+  File "D:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\services\utils.py", line 10, in preprocess_data
+    df['scheduled_departure_dt'] = pd.to_datetime(df['scheduled_departure_dt'])
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\tools\datetimes.py", line 887, in to_datetime
+    values = convert_listlike(arg._values, format)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\tools\datetimes.py", line 408, in _convert_listlike_datetimes
+    allow_object=True,
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2198, in objects_to_datetime64ns
+    raise err
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2187, in objects_to_datetime64ns
+    allow_mixed=allow_mixed,
+  File "pandas\_libs\tslib.pyx", line 379, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 611, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 749, in pandas._libs.tslib._array_to_datetime_object
+  File "pandas\_libs\tslib.pyx", line 740, in pandas._libs.tslib._array_to_datetime_object
+  File "pandas\_libs\tslibs\parsing.pyx", line 257, in pandas._libs.tslibs.parsing.parse_datetime_string
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 1356, in parse
+    return DEFAULTPARSER.parse(timestr, **kwargs)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 653, in parse
+    ret = self._build_naive(res, default)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\dateutil\parser\_parser.py", line 1227, in _build_naive
+    naive = default.replace(**repl)
+ValueError: year 76675 is out of range
+2025-08-16 21:48:08,438 ERROR app Thread-22 : Prediction failed
+Traceback (most recent call last):
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2192, in objects_to_datetime64ns
+    values, tz_parsed = conversion.datetime_to_datetime64(data.ravel("K"))
+  File "pandas\_libs\tslibs\conversion.pyx", line 359, in pandas._libs.tslibs.conversion.datetime_to_datetime64
+TypeError: Unrecognized value type: <class 'str'>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "web/app.py", line 186, in predict
+    prediction = predict_delay(request.form['model'], user_df)
+  File "D:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\services\predictor.py", line 66, in predict_delay
+    X_user, _ = preprocess_data(user_df)
+  File "D:\NAM3 KI 2 2025\NCKH - BIG DATA\flight_delay_prediction_full\services\utils.py", line 10, in preprocess_data
+    df['scheduled_departure_dt'] = pd.to_datetime(df['scheduled_departure_dt'])
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\tools\datetimes.py", line 887, in to_datetime
+    values = convert_listlike(arg._values, format)
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\tools\datetimes.py", line 408, in _convert_listlike_datetimes
+    allow_object=True,
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2198, in objects_to_datetime64ns
+    raise err
+  File "C:\Users\22521\Anaconda3\lib\site-packages\pandas\core\arrays\datetimes.py", line 2187, in objects_to_datetime64ns
+    allow_mixed=allow_mixed,
+  File "pandas\_libs\tslib.pyx", line 379, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 606, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 602, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslib.pyx", line 578, in pandas._libs.tslib.array_to_datetime
+  File "pandas\_libs\tslibs\np_datetime.pyx", line 120, in pandas._libs.tslibs.np_datetime.check_dts_bounds
+pandas._libs.tslibs.np_datetime.OutOfBoundsDatetime: Out of bounds nanosecond timestamp: 877-07-08 19:08:00

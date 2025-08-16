@@ -1,7 +1,22 @@
 import sys
+
+# ensure project root is on sys.path
+import sys
 import os
 import json
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# Compatibility shim: some pickled models or older code reference `numpy._core`.
+# Map `numpy._core` to `numpy.core` at import time so those imports succeed.
+try:
+    # defer import until numpy is installed; this won't raise if numpy missing here
+    import importlib
+    np_core = importlib.import_module('numpy.core')
+    # insert alias into sys.modules so `import numpy._core` resolves to numpy.core
+    sys.modules.setdefault('numpy._core', np_core)
+except Exception:
+    # quietly ignore; if numpy not installed yet the real import will raise later
+    pass
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import pandas as pd
@@ -129,10 +144,9 @@ def predict():
     prev_delay = None
     user = get_current_user()
 
-    # Bắt buộc đăng nhập mới được dự đoán
+    # Allow anonymous users to perform a prediction (we'll use a guest identity)
     if not user:
-        flash("Bạn cần đăng nhập để sử dụng chức năng dự đoán.")
-        return redirect(url_for("signin"))
+        user = {"name": "Khách", "email": "guest@local", "role": "user"}
 
     if request.method == "POST":
         form_data = request.form.to_dict()
@@ -178,8 +192,8 @@ def predict():
             # Lưu dữ liệu dự đoán
             prediction_record = {
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "user_name": user["name"],
-                "user_email": user["email"],
+                "user_name": user.get("name", "Khách"),
+                "user_email": user.get("email", "guest@local"),
                 "mode": mode,
                 "origin_airport": request.form["origin_airport"],
                 "destination_airport": request.form["destination_airport"],
@@ -205,7 +219,12 @@ def predict():
             save_prediction_data(prediction_record)
 
         except Exception as e:
-            error = f"Lỗi khi dự đoán: {e}"
+            # Log full traceback and return a friendly message to the user
+            try:
+                app.logger.exception("Prediction failed")
+            except Exception:
+                print("[ERROR] Prediction failed:", e)
+            error = "Đã có lỗi khi dự đoán — vui lòng kiểm tra log hoặc liên hệ quản trị viên."
 
     return render_template("index_new.html", prediction=prediction, error=error, arrival_time_str=arrival_time_str, form_data=form_data, prev_delay=prev_delay, user=user)
 
@@ -549,10 +568,26 @@ def admin_dashboard():
 #     return {"message": "Logged out successfully"}
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Configure file logging to capture errors and avoid losing tracebacks when
+    # the dev server restarts. Run with use_reloader=False to prevent double-start
+    # and occasional socket issues on Windows.
+    import logging
+    from logging.handlers import RotatingFileHandler
 
-# if __name__ == "__main__":
-#     app.run(debug=True)
+    log_dir = os.path.join(os.path.dirname(__file__), '..', 'logs')
+    try:
+        os.makedirs(log_dir, exist_ok=True)
+    except Exception:
+        pass
 
-if __name__ == "__main__":
-    app.run(debug=True)
+    log_file = os.path.join(log_dir, 'flask_app.log')
+    handler = RotatingFileHandler(log_file, maxBytes=2*1024*1024, backupCount=3)
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+    handler.setFormatter(formatter)
+    app.logger.addHandler(handler)
+    app.logger.setLevel(logging.DEBUG)
+
+    # Run without the reloader and debugger to keep a single stable process
+    # The user should run this command in PowerShell as shown below.
+    app.run(host='127.0.0.1', port=5000, debug=False, use_reloader=False)

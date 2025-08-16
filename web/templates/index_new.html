@@ -2,15 +2,16 @@
 {% block content %}
 <div class="main-container">
     <h1 class="page-title">✈️ Dự đoán độ trễ chuyến bay</h1>
-    <form method="POST" class="prediction-form">
+    <form method="POST" action="{{ url_for('predict') }}" class="prediction-form">
+        <form method="POST" action="{{ url_for('predict') }}" class="prediction-form" id="predictForm">
         <div class="form-grid">
             <!-- Cột 1: Chế độ & Mô hình -->
             <div class="form-section">
                 <div class="section-title"><span>🔧</span> Chế độ & Mô hình</div>
                 <label>Chọn chế độ dự đoán:</label>
                 <select id="mode" name="mode" onchange="togglePrevFlight()">
-                    <option value="normal">Dự đoán thông thường</option>
-                    <option value="prev_flight">Dự đoán dựa trên chuyến bay trước</option>
+                        <option value="normal" {% if form_data.get('mode') == 'normal' %}selected{% endif %}>Dự đoán thông thường</option>
+                        <option value="prev_flight" {% if form_data.get('mode') == 'prev_flight' %}selected{% endif %}>Dự đoán dựa trên chuyến bay trước</option>
                 </select>
                 <label>Chọn mô hình ML:</label>
                 <select name="model" required>
@@ -25,36 +26,47 @@
             <div class="form-section">
                 <div class="section-title"><span>🛫</span> Thông tin chuyến bay</div>
                 <label>Thời gian bay dự kiến (phút):</label>
-                <input type="number" name="elapsed_time" min="1" required>
+                    <input type="number" name="elapsed_time" min="1" required value="{{ form_data.get('elapsed_time','') }}">
                 <label>Thời gian khởi hành:</label>
-                <input type="datetime-local" name="departure_time" required>
+                    <input type="datetime-local" name="departure_time" required value="{{ form_data.get('departure_time','') }}">
                 <label>Tail Number:</label>
-                <input type="text" name="tail_number" maxlength="10" required>
+                    <input type="text" name="tail_number" maxlength="10" required value="{{ form_data.get('tail_number','') }}">
                 <label>Carrier Code:</label>
-                <input type="text" name="carrier_code" maxlength="5" required>
+                    <input type="text" name="carrier_code" maxlength="5" required value="{{ form_data.get('carrier_code','') }}">
                 <label>Origin Airport:</label>
-                <input type="text" name="origin_airport" maxlength="5" required>
+                    <input type="text" name="origin_airport" maxlength="5" required value="{{ form_data.get('origin_airport','') }}">
                 <label>Destination Airport:</label>
-                <input type="text" name="destination_airport" maxlength="5" required>
+                    <input type="text" name="destination_airport" maxlength="5" required value="{{ form_data.get('destination_airport','') }}">
             </div>
 
             <!-- Cột 3: Thời tiết -->
             <div class="form-section">
                 <div class="section-title"><span>🌦️</span> Thời tiết sân bay đi</div>
                 <label>Nhiệt độ (°C):</label>
-                <input type="number" step="0.1" name="temp_x" required>
+                    <input type="number" step="0.1" name="temp_x" required value="{{ form_data.get('temp_x','') }}">
                 <label>Lượng mưa (mm):</label>
-                <input type="number" step="0.1" name="precip_x" required>
+                    <input type="number" step="0.1" name="precip_x" required value="{{ form_data.get('precip_x','') }}">
                 <label>Tốc độ gió (km/h):</label>
-                <input type="number" step="0.1" name="wind_x" required>
+                    <input type="number" step="0.1" name="wind_x" required value="{{ form_data.get('wind_x','') }}">
 
                 <div class="section-title"><span>🌦️</span> Thời tiết sân bay đến</div>
                 <label>Nhiệt độ (°C):</label>
-                <input type="number" step="0.1" name="temp_y" required>
+                    <input type="number" step="0.1" name="temp_y" required value="{{ form_data.get('temp_y','') }}">
                 <label>Lượng mưa (mm):</label>
-                <input type="number" step="0.1" name="precip_y" required>
+                    <input type="number" step="0.1" name="precip_y" required value="{{ form_data.get('precip_y','') }}">
                 <label>Tốc độ gió (km/h):</label>
-                <input type="number" step="0.1" name="wind_y" required>
+                    <input type="number" step="0.1" name="wind_y" required value="{{ form_data.get('wind_y','') }}">
+            </div>
+        </div>
+
+        <!-- Prev flight container (toggled by JS) -->
+        <div id="prev-flight-fields" style="display:none; width:100%; max-width:1400px; grid-column:1 / -1; margin-top:12px;">
+            <div class="form-section" style="background:rgba(255,255,255,0.06); padding:12px; border-radius:6px;">
+                <div class="section-title">⏮️ Thông tin chuyến bay trước</div>
+                <label>Thời gian khởi hành chuyến trước:</label>
+                <input type="datetime-local" name="prev_departure_time">
+                <label>Thời gian đến nơi chuyến trước:</label>
+                <input type="datetime-local" name="prev_arrival_time">
             </div>
         </div>
 
