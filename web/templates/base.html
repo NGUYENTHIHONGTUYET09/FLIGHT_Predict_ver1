@@ -166,13 +166,19 @@
     
     <script>
     function openAuthModal() {
-        document.getElementById('authModal').style.display = 'block';
-        document.body.style.overflow = 'hidden';
+        const el = document.getElementById('authModal');
+        if (el) {
+            el.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
     }
     
     function closeAuthModal() {
-        document.getElementById('authModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
+        const el = document.getElementById('authModal');
+        if (el) {
+            el.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
     }
     
     function toggleAuthMode() {
@@ -196,12 +202,17 @@
         }
     }
     
-    // Close modal when clicking outside
-    document.getElementById('authModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeAuthModal();
+    // Close modal when clicking outside (guard if modal not rendered)
+    (function(){
+        const authEl = document.getElementById('authModal');
+        if (authEl) {
+            authEl.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeAuthModal();
+                }
+            });
         }
-    });
+    })();
 
     // Auto open modal if there's an error
 </script>

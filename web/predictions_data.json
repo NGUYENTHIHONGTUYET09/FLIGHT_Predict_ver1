@@ -1,0 +1,496 @@
+[
+  {
+    "timestamp": "2025-08-16 21:43:06",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "gv",
+    "departure_time": "2025-08-16T21:42",
+    "elapsed_time": 67,
+    "model": "LinearRegression_model",
+    "prediction": -1579.65,
+    "arrival_time": "20:29, 15/08/2025",
+    "prev_delay": null,
+    "carrier_code": "hh",
+    "tail_number": "hi",
+    "weather_origin": {
+      "temperature": 43.0,
+      "precipitation": 23.0,
+      "wind_speed": 12.0
+    },
+    "weather_destination": {
+      "temperature": 35.0,
+      "precipitation": 12.0,
+      "wind_speed": 14.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:43:06",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "gv",
+    "departure_time": "2025-08-16T21:42",
+    "elapsed_time": 67,
+    "model": "LinearRegression_model",
+    "prediction": -1579.65,
+    "arrival_time": "20:29, 15/08/2025",
+    "prev_delay": null,
+    "carrier_code": "hh",
+    "tail_number": "hi",
+    "weather_origin": {
+      "temperature": 43.0,
+      "precipitation": 23.0,
+      "wind_speed": 12.0
+    },
+    "weather_destination": {
+      "temperature": 35.0,
+      "precipitation": 12.0,
+      "wind_speed": 1.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:43:32",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "gv",
+    "departure_time": "2025-08-16T21:42",
+    "elapsed_time": 67,
+    "model": "XGBoost_model",
+    "prediction": -4.0,
+    "arrival_time": "22:45, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "hh",
+    "tail_number": "hi",
+    "weather_origin": {
+      "temperature": 43.0,
+      "precipitation": 23.0,
+      "wind_speed": 12.0
+    },
+    "weather_destination": {
+      "temperature": 35.0,
+      "precipitation": 12.0,
+      "wind_speed": 14.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:45:40",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "prev_flight",
+    "origin_airport": "uh",
+    "destination_airport": "hjk",
+    "departure_time": "2025-08-16T21:45",
+    "elapsed_time": 45,
+    "model": "LinearRegression_model",
+    "prediction": -1567.84,
+    "arrival_time": "20:22, 15/08/2025",
+    "prev_delay": null,
+    "carrier_code": "uh",
+    "tail_number": "jh",
+    "weather_origin": {
+      "temperature": 12.0,
+      "precipitation": 45.0,
+      "wind_speed": 15.0
+    },
+    "weather_destination": {
+      "temperature": 24.0,
+      "precipitation": 23.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:46:21",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "prev_flight",
+    "origin_airport": "uh",
+    "destination_airport": "hjk",
+    "departure_time": "2025-08-16T21:45",
+    "elapsed_time": 45,
+    "model": "LinearRegression_model",
+    "prediction": -1567.84,
+    "arrival_time": "20:22, 15/08/2025",
+    "prev_delay": -586.0,
+    "carrier_code": "uh",
+    "tail_number": "jh",
+    "weather_origin": {
+      "temperature": 12.0,
+      "precipitation": 45.0,
+      "wind_speed": 15.0
+    },
+    "weather_destination": {
+      "temperature": 24.0,
+      "precipitation": 23.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:48:15",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "hj",
+    "departure_time": "2005-07-08T19:08",
+    "elapsed_time": 67,
+    "model": "LinearRegression_model",
+    "prediction": -1526.5,
+    "arrival_time": "18:48, 07/07/2005",
+    "prev_delay": null,
+    "carrier_code": "hb",
+    "tail_number": "hb",
+    "weather_origin": {
+      "temperature": 89.0,
+      "precipitation": 8.0,
+      "wind_speed": 78.0
+    },
+    "weather_destination": {
+      "temperature": 78.0,
+      "precipitation": 87.0,
+      "wind_speed": 97.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:48:35",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "hj",
+    "departure_time": "2005-07-08T19:08",
+    "elapsed_time": 67,
+    "model": "LinearRegression_model",
+    "prediction": -1495.01,
+    "arrival_time": "19:19, 07/07/2005",
+    "prev_delay": null,
+    "carrier_code": "hb",
+    "tail_number": "hb",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 8.0,
+      "wind_speed": 78.0
+    },
+    "weather_destination": {
+      "temperature": 78.0,
+      "precipitation": 87.0,
+      "wind_speed": 97.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:48:50",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "hj",
+    "departure_time": "2005-07-08T19:08",
+    "elapsed_time": 67,
+    "model": "LinearRegression_model",
+    "prediction": -1555.86,
+    "arrival_time": "18:19, 07/07/2005",
+    "prev_delay": null,
+    "carrier_code": "hb",
+    "tail_number": "hb",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    },
+    "weather_destination": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:49:03",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "hj",
+    "departure_time": "2025-08-16T19:08",
+    "elapsed_time": 67,
+    "model": "LinearRegression_model",
+    "prediction": -1555.86,
+    "arrival_time": "18:19, 15/08/2025",
+    "prev_delay": null,
+    "carrier_code": "hb",
+    "tail_number": "hb",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    },
+    "weather_destination": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:49:10",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "hj",
+    "departure_time": "2025-08-16T19:08",
+    "elapsed_time": 67,
+    "model": "XGBoost_model",
+    "prediction": -4.0,
+    "arrival_time": "20:11, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "hb",
+    "tail_number": "hb",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    },
+    "weather_destination": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:49:17",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "hj",
+    "departure_time": "2025-08-16T19:08",
+    "elapsed_time": 67,
+    "model": "RandomForest_model",
+    "prediction": 6.85,
+    "arrival_time": "20:21, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "hb",
+    "tail_number": "hb",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    },
+    "weather_destination": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:49:22",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "h",
+    "destination_airport": "hj",
+    "departure_time": "2025-08-16T19:08",
+    "elapsed_time": 67,
+    "model": "LightGBM_model",
+    "prediction": 5.36,
+    "arrival_time": "20:20, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "hb",
+    "tail_number": "hb",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    },
+    "weather_destination": {
+      "temperature": 25.0,
+      "precipitation": 28.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:54:57",
+    "user_name": "Tuyết 1",
+    "user_email": "nguyenthihongtuyet004@gmail.com",
+    "mode": "normal",
+    "origin_airport": "ok",
+    "destination_airport": "jk",
+    "departure_time": "2025-08-16T21:54",
+    "elapsed_time": 121,
+    "model": "RandomForest_model",
+    "prediction": 9.68,
+    "arrival_time": "00:04, 17/08/2025",
+    "prev_delay": null,
+    "carrier_code": "iu",
+    "tail_number": "ui",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 24.0,
+      "wind_speed": 23.0
+    },
+    "weather_destination": {
+      "temperature": 24.0,
+      "precipitation": 25.0,
+      "wind_speed": 26.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:55:10",
+    "user_name": "Tuyết 1",
+    "user_email": "nguyenthihongtuyet004@gmail.com",
+    "mode": "normal",
+    "origin_airport": "ok",
+    "destination_airport": "jk",
+    "departure_time": "2025-08-16T21:54",
+    "elapsed_time": 121,
+    "model": "RandomForest_model",
+    "prediction": 9.68,
+    "arrival_time": "00:04, 17/08/2025",
+    "prev_delay": null,
+    "carrier_code": "iu",
+    "tail_number": "ui",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 24.0,
+      "wind_speed": 23.0
+    },
+    "weather_destination": {
+      "temperature": 24.0,
+      "precipitation": 25.0,
+      "wind_speed": 26.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:56:27",
+    "user_name": "Tuyết 1",
+    "user_email": "nguyenthihongtuyet004@gmail.com",
+    "mode": "normal",
+    "origin_airport": "HAN",
+    "destination_airport": "SGN",
+    "departure_time": "2025-08-16T21:56",
+    "elapsed_time": 56,
+    "model": "RandomForest_model",
+    "prediction": 4.48,
+    "arrival_time": "22:56, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "VN",
+    "tail_number": "N615AS12",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 26.0,
+      "wind_speed": 24.0
+    },
+    "weather_destination": {
+      "temperature": 22.0,
+      "precipitation": 23.0,
+      "wind_speed": 15.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:56:34",
+    "user_name": "Tuyết 1",
+    "user_email": "nguyenthihongtuyet004@gmail.com",
+    "mode": "normal",
+    "origin_airport": "HAN",
+    "destination_airport": "SGN",
+    "departure_time": "2025-08-16T21:56",
+    "elapsed_time": 56,
+    "model": "XGBoost_model",
+    "prediction": 4.48,
+    "arrival_time": "22:56, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "VN",
+    "tail_number": "N615AS12",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 26.0,
+      "wind_speed": 24.0
+    },
+    "weather_destination": {
+      "temperature": 22.0,
+      "precipitation": 23.0,
+      "wind_speed": 15.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:56:42",
+    "user_name": "Tuyết 1",
+    "user_email": "nguyenthihongtuyet004@gmail.com",
+    "mode": "normal",
+    "origin_airport": "HAN",
+    "destination_airport": "SGN",
+    "departure_time": "2025-08-16T21:56",
+    "elapsed_time": 56,
+    "model": "LightGBM_model",
+    "prediction": 11.5,
+    "arrival_time": "23:03, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "VN",
+    "tail_number": "N615AS12",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 26.0,
+      "wind_speed": 24.0
+    },
+    "weather_destination": {
+      "temperature": 22.0,
+      "precipitation": 23.0,
+      "wind_speed": 15.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:57:18",
+    "user_name": "Tuyết 1",
+    "user_email": "nguyenthihongtuyet004@gmail.com",
+    "mode": "normal",
+    "origin_airport": "HAN",
+    "destination_airport": "SGN",
+    "departure_time": "2025-08-16T21:56",
+    "elapsed_time": 56,
+    "model": "XGBoost_model",
+    "prediction": 4.48,
+    "arrival_time": "22:56, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "VN",
+    "tail_number": "N615AS12",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 26.0,
+      "wind_speed": 24.0
+    },
+    "weather_destination": {
+      "temperature": 22.0,
+      "precipitation": 23.0,
+      "wind_speed": 15.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 21:57:45",
+    "user_name": "Tuyết 1",
+    "user_email": "nguyenthihongtuyet004@gmail.com",
+    "mode": "normal",
+    "origin_airport": "HAN",
+    "destination_airport": "SGN",
+    "departure_time": "2025-08-16T21:56",
+    "elapsed_time": 56,
+    "model": "XGBoost_model",
+    "prediction": 4.48,
+    "arrival_time": "22:56, 16/08/2025",
+    "prev_delay": null,
+    "carrier_code": "VN",
+    "tail_number": "N615AS12",
+    "weather_origin": {
+      "temperature": 25.0,
+      "precipitation": 26.0,
+      "wind_speed": 24.0
+    },
+    "weather_destination": {
+      "temperature": 22.0,
+      "precipitation": 23.0,
+      "wind_speed": 15.0
+    }
+  }
+]
