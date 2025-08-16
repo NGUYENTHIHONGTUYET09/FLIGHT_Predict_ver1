@@ -82,21 +82,10 @@ def predict_delay(model_name, user_df):
         heuristic = max(0.0, base * 0.08 + 0.5 * prev_delay_val)
         return round(float(heuristic), 2)
 
-    # If LinearRegression, scale
-    if model_name == "LinearRegression_model":
-        scaler_file = os.path.join(models_dir, 'scaler.pkl')
-        if 'scaler' not in _MODEL_CACHE:
-            if os.path.exists(scaler_file):
-                _MODEL_CACHE['scaler'] = _load_model_safe(scaler_file)
-            else:
-                _MODEL_CACHE['scaler'] = None
-        scaler = _MODEL_CACHE.get('scaler')
-        if scaler is not None:
-            try:
-                X_user = scaler.transform(X_user)
-            except Exception:
-                # fallback to unscaled if scaler fails
-                pass
+    # No special-casing for specific model names anymore. Models should
+    # accept the numeric feature matrix as-is. If scaling is required by a
+    # model, include a scaler.pkl next to the model and update loading
+    # logic to use it for that specific model name.
 
     # predict using loaded model
     try:

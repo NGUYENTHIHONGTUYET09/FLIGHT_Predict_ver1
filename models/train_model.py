@@ -4,7 +4,7 @@ import pandas as pd
 import joblib
 
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+# LinearRegression removed; using Domino_model placeholder instead
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor
@@ -57,7 +57,7 @@ joblib.dump(scaler, os.path.join(MODEL_DIR, "scaler.pkl"))
 
 # 🤖 Define models
 models = {
-    "LinearRegression_model": LinearRegression(),
+    "Domino_model": RandomForestRegressor(n_estimators=50, random_state=7),
     "RandomForest_model": RandomForestRegressor(n_estimators=100, random_state=42),
     "XGBoost_model": XGBRegressor(n_estimators=100, random_state=42),
     "LightGBM_model": LGBMRegressor(n_estimators=100, random_state=42)
@@ -65,7 +65,9 @@ models = {
 
 # 🏁 Train and save models with basic evaluation
 for name, model in models.items():
-    if name == "LinearRegression_model":
+    # For Domino_model we will use the scaled training set as it may be
+    # beneficial; other models use the unscaled matrix.
+    if name == "Domino_model":
         model.fit(X_train_scaled, y_train)
         preds = model.predict(X_test_scaled)
     else:

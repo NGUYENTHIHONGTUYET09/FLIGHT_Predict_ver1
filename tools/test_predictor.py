@@ -23,7 +23,7 @@ sample = {
 df = pd.DataFrame(sample)
 
 try:
-    pred = predict_delay('LinearRegression_model', df)
+    pred = predict_delay('Domino_model', df)
     print('PREDICTION_OK:', pred)
 except Exception as e:
     print('PREDICTION_ERROR:', e)
