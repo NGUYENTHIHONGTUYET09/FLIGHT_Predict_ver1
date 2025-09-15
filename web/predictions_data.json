@@ -8,7 +8,7 @@
     "destination_airport": "gv",
     "departure_time": "2025-08-16T21:42",
     "elapsed_time": 67,
-    "model": "LinearRegression_model",
+    "model": "Domino_model",
     "prediction": -1579.65,
     "arrival_time": "20:29, 15/08/2025",
     "prev_delay": null,
@@ -34,7 +34,7 @@
     "destination_airport": "gv",
     "departure_time": "2025-08-16T21:42",
     "elapsed_time": 67,
-    "model": "LinearRegression_model",
+    "model": "Domino_model",
     "prediction": -1579.65,
     "arrival_time": "20:29, 15/08/2025",
     "prev_delay": null,
@@ -86,7 +86,7 @@
     "destination_airport": "hjk",
     "departure_time": "2025-08-16T21:45",
     "elapsed_time": 45,
-    "model": "LinearRegression_model",
+    "model": "Domino_model",
     "prediction": -1567.84,
     "arrival_time": "20:22, 15/08/2025",
     "prev_delay": null,
@@ -112,7 +112,7 @@
     "destination_airport": "hjk",
     "departure_time": "2025-08-16T21:45",
     "elapsed_time": 45,
-    "model": "LinearRegression_model",
+    "model": "Domino_model",
     "prediction": -1567.84,
     "arrival_time": "20:22, 15/08/2025",
     "prev_delay": -586.0,
@@ -138,7 +138,7 @@
     "destination_airport": "hj",
     "departure_time": "2005-07-08T19:08",
     "elapsed_time": 67,
-    "model": "LinearRegression_model",
+    "model": "Domino_model",
     "prediction": -1526.5,
     "arrival_time": "18:48, 07/07/2005",
     "prev_delay": null,
@@ -164,7 +164,7 @@
     "destination_airport": "hj",
     "departure_time": "2005-07-08T19:08",
     "elapsed_time": 67,
-    "model": "LinearRegression_model",
+    "model": "Domino_model",
     "prediction": -1495.01,
     "arrival_time": "19:19, 07/07/2005",
     "prev_delay": null,
@@ -190,7 +190,7 @@
     "destination_airport": "hj",
     "departure_time": "2005-07-08T19:08",
     "elapsed_time": 67,
-    "model": "LinearRegression_model",
+    "model": "Domino_model",
     "prediction": -1555.86,
     "arrival_time": "18:19, 07/07/2005",
     "prev_delay": null,
@@ -216,7 +216,7 @@
     "destination_airport": "hj",
     "departure_time": "2025-08-16T19:08",
     "elapsed_time": 67,
-    "model": "LinearRegression_model",
+    "model": "Domino_model",
     "prediction": -1555.86,
     "arrival_time": "18:19, 15/08/2025",
     "prev_delay": null,
@@ -491,6 +491,84 @@
       "temperature": 22.0,
       "precipitation": 23.0,
       "wind_speed": 15.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 23:24:36",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "SEA",
+    "destination_airport": "ANC",
+    "departure_time": "2025-08-16T23:24",
+    "elapsed_time": 45,
+    "model": "Domino_model",
+    "prediction": 3.6,
+    "arrival_time": "00:12, 17/08/2025",
+    "prev_delay": null,
+    "carrier_code": "AS",
+    "tail_number": "N615AS12",
+    "weather_origin": {
+      "temperature": 15.0,
+      "precipitation": 25.0,
+      "wind_speed": 25.0
+    },
+    "weather_destination": {
+      "temperature": 26.0,
+      "precipitation": 26.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 23:24:51",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "SEA",
+    "destination_airport": "ANC",
+    "departure_time": "2025-08-16T23:24",
+    "elapsed_time": 45,
+    "model": "RandomForest_model",
+    "prediction": 7.78,
+    "arrival_time": "00:16, 17/08/2025",
+    "prev_delay": null,
+    "carrier_code": "AS",
+    "tail_number": "N615AS12",
+    "weather_origin": {
+      "temperature": 15.0,
+      "precipitation": 25.0,
+      "wind_speed": 25.0
+    },
+    "weather_destination": {
+      "temperature": 26.0,
+      "precipitation": 26.0,
+      "wind_speed": 25.0
+    }
+  },
+  {
+    "timestamp": "2025-08-16 23:24:51",
+    "user_name": "Admin",
+    "user_email": "nguyenthihongtuyet122022@gmail.com",
+    "mode": "normal",
+    "origin_airport": "SEA",
+    "destination_airport": "ANC",
+    "departure_time": "2025-08-16T23:24",
+    "elapsed_time": 45,
+    "model": "RandomForest_model",
+    "prediction": 7.78,
+    "arrival_time": "00:16, 17/08/2025",
+    "prev_delay": null,
+    "carrier_code": "AS",
+    "tail_number": "N615AS12",
+    "weather_origin": {
+      "temperature": 15.0,
+      "precipitation": 25.0,
+      "wind_speed": 25.0
+    },
+    "weather_destination": {
+      "temperature": 26.0,
+      "precipitation": 26.0,
+      "wind_speed": 25.0
     }
   }
 ]
